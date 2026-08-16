@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { getUser, logout } from "@/lib/auth-client";
+import { getUser, logout, handleAuthCallback } from "@/lib/auth-client";
 import {
   LayoutDashboard,
   Activity,
@@ -36,7 +36,24 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     let cancelled = false;
-    getUser().then((user) => {
+    (async () => {
+      // Email confirmation and OAuth redirects can land on a protected route
+      // (e.g. the root page forwards here) before the visitor has a session -
+      // process any pending callback token first so it isn't dropped on the
+      // way to /login.
+      try {
+        const result = await handleAuthCallback();
+        if (cancelled) return;
+        if (result?.user) {
+          setAuthed(true);
+          setChecked(true);
+          return;
+        }
+      } catch {
+        // No callback pending, or it failed - fall back to checking the session.
+      }
+
+      const user = await getUser();
       if (cancelled) return;
       if (!user) {
         router.replace("/login");
@@ -44,7 +61,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
       }
       setAuthed(true);
       setChecked(true);
-    });
+    })();
     return () => {
       cancelled = true;
     };

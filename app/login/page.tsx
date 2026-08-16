@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getUser, login, signup, oauthLogin, handleAuthCallback, AuthError } from "@/lib/auth-client";
+import { getUser, login, signup, oauthLogin, handleAuthCallback, getSettings, AuthError } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
@@ -12,6 +12,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [googleEnabled, setGoogleEnabled] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,6 +25,10 @@ export default function LoginPage() {
     getUser().then((user) => {
       if (user) router.replace("/dashboard");
     });
+
+    getSettings()
+      .then((settings) => setGoogleEnabled(!!settings.providers?.google))
+      .catch(() => setGoogleEnabled(false));
   }, [router]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -67,15 +72,19 @@ export default function LoginPage() {
           <h1 className="text-lg font-semibold">Predictive Maintenance Node</h1>
         </div>
 
-        <Button variant="outline" className="w-full mb-4" onClick={handleGoogle} type="button">
-          Continue with Google
-        </Button>
+        {googleEnabled && (
+          <>
+            <Button variant="outline" className="w-full mb-4" onClick={handleGoogle} type="button">
+              Continue with Google
+            </Button>
 
-        <div className="flex items-center gap-3 my-4 text-xs text-muted">
-          <div className="h-px flex-1 bg-border" />
-          or
-          <div className="h-px flex-1 bg-border" />
-        </div>
+            <div className="flex items-center gap-3 my-4 text-xs text-muted">
+              <div className="h-px flex-1 bg-border" />
+              or
+              <div className="h-px flex-1 bg-border" />
+            </div>
+          </>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <input

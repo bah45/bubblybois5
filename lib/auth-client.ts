@@ -9,6 +9,7 @@ export {
   oauthLogin,
   handleAuthCallback,
   onAuthChange,
+  getSettings,
   AuthError,
   MissingIdentityError,
   type User,
