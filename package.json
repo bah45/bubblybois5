@@ -1,0 +1,41 @@
+{
+  "name": "bubbly-bois-predictive-maintenance",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate"
+  },
+  "dependencies": {
+    "@ai-sdk/google": "^1.0.0",
+    "@netlify/database": "^1.0.0",
+    "@netlify/functions": "^3.0.0",
+    "@netlify/identity": "^1.0.0",
+    "ai": "^4.0.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "drizzle-orm": "^1.0.0-beta.22",
+    "lucide-react": "^0.460.0",
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.13.0",
+    "resend": "^4.0.0",
+    "tailwind-merge": "^2.5.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.0",
+    "drizzle-kit": "^1.0.0-beta.22",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.6.0"
+  }
+}
